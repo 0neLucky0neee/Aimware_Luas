@@ -9,6 +9,7 @@ Follow these steps:
 ![Image](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/LuaSecurity.png)
 2. **Load the script**
 3. **Grant admin rights** (required for the firewall changes)
+![Image_2](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/PowerShell%20UAC.png)
 4. **Make sure it loads properly**
    * Press the **"Disable"** button
    * If status changes from **"Unknown"**, script was loaded correctly
