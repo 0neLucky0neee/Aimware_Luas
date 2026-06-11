@@ -11,7 +11,7 @@ Follow these steps:
 3. **Grant admin rights** (required for the firewall changes)
 4. **Make sure it loads properly**
    * Press the **"Disable"** button
-   * If status changes from ***"Unknown"***, script was loaded correctly
+   * If status changes from **"Unknown"**, script was loaded correctly
    * If not, simply reload one more time
 5. **Join any match**
 6. **Activate when needed:** as soon as votekick starts against you, press **"Enable"** button
