@@ -70,7 +70,7 @@ local TempBridgePath 	= ""
 function InitPowerShellScript()
 	TempBridgePath = cFullSteamPath:gsub("\\steam%.exe", "")
 
-	local PowerShellScriptRAW = string.format([[Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; netsh advfirewall set allprofiles state on; Get-Process "powershell" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -match '%s' } | Stop-Process -Force; Start-Sleep -Milliseconds 1000; $host.UI.RawUI.WindowTitle = '%s'; while ([bool](Get-Process -Name 'cs2' -ErrorAction SilentlyContinue)) { if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; New-NetFirewallRule -DisplayName '%s' -Direction Outbound -Action Block -Program '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; break; } Start-Sleep -Milliseconds 100; } Remove-NetFirewallRule -DisplayName '%s'; Start-Sleep -Milliseconds 5000; ]],
+	local PowerShellScriptRAW = string.format([[Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\mpssvc' -Name 'Start' -Value 2;  Start-Sleep -Milliseconds 500; net start mpssvc; Start-Sleep -Milliseconds 500; netsh advfirewall set allprofiles state on; Get-Process "powershell" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -match '%s' } | Stop-Process -Force; Start-Sleep -Milliseconds 1000; $host.UI.RawUI.WindowTitle = '%s'; while ([bool](Get-Process -Name 'cs2' -ErrorAction SilentlyContinue)) { if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; New-NetFirewallRule -DisplayName '%s' -Direction Outbound -Action Block -Program '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; break; } Start-Sleep -Milliseconds 100; } Remove-NetFirewallRule -DisplayName '%s'; Start-Sleep -Milliseconds 5000; ]],
 
 		TempBridgePath .. '\\' .. cPowerShell_BlockFileName, TempBridgePath .. '\\' .. cPowerShell_UnlockFileName, TempBridgePath .. '\\' .. cPowerShell_ExitFileName,
 
@@ -191,7 +191,7 @@ function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.1"
+local cCurrentVersion = "v1.2"
 
 function CheckForUpdates()
 	local cExpectedVesion = http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt")
