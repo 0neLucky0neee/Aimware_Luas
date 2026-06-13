@@ -12,7 +12,7 @@ ffi.cdef[[
 local SW_HIDE = 0x0
 local SW_SHOW = 0x5
 
-local ERROR_SUCCESS = 0
+local ERROR_SUCCESS = 0x0
 
 local HKEY_CURRENT_USER 	= ffi.cast("void*", 0x80000001)
 local HKEY_STEAM_SUB_PATH 	= "Software\\Valve\\Steam"
@@ -37,7 +37,7 @@ local cReconnectBypassInfo_Text = 	" Getting kicked by team? Wanna Grief teammat
 					" You should be able to reconnect for about ~2minutes, \n\n" ..
 					" as many times as you like!"
 
-local ReconnectBypass_Window_Ref 		= gui.Window("var_reconnect_bypass_window_0", "Reconnect Bypass", 220, 50, 500, 270)
+local ReconnectBypass_Window_Ref 		= gui.Window("var_reconnect_bypass_window_0", "Reconnect Bypass", 220, 90, 500, 270)
 
 local ReconnectBypass_Menu_GroupBox_Ref 	= gui.Groupbox(ReconnectBypass_Window_Ref, "Controller", 20, 15, 150, 80)
 local ReconnectBypass_Enable_Button_Ref 	= gui.Button(ReconnectBypass_Menu_GroupBox_Ref, "Enable", BlockSteamOutConnection)
@@ -49,7 +49,7 @@ local ReconnectBypassStatus_Text_Ref 		= gui.Text(ReconnectBypassStatus_GroupBox
 local ReconnectBypassInfo_GroupBox_Ref 		= gui.Groupbox(ReconnectBypass_Window_Ref, "When should I turn it on?", (150 + 20) + 20, 15, 295, ((15 + 80) + 15 + 20) + 80)
 local ReconnectBypassInfo_Text_Ref 		= gui.Text(ReconnectBypassInfo_GroupBox_Ref, cReconnectBypassInfo_Text)
 
-ReconnectBypass_Window_Ref:SetOpenKey(0x2D)
+ReconnectBypass_Window_Ref:SetOpenKey(gui.GetValue("adv.menukey"))
 
 local bReconnectBypassStatusEnabled 		= -1
 
@@ -64,14 +64,15 @@ local cFullSteamPath 	= ""
 local cBackupSteamPath 	= "C:\\Program Files (x86)\\Steam\\steam.exe"
 local cSteamExeRegName  = "SteamExe"
 
-local TempBridgePath = ""
+local TempBridgePath 	= ""
 
 -------------- / Function_1 \ --------------
 function InitPowerShellScript()
 	TempBridgePath = cFullSteamPath:gsub("\\steam%.exe", "")
-	TempBridgePath = TempBridgePath:gsub("\\Steam%.exe", "")
 
-	local PowerShellScriptRAW = string.format([[Get-Process -Name "powershell" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq '%s' } | Stop-Process -Force; Start-Sleep -Milliseconds 500;$host.UI.RawUI.WindowTitle = '%s'; while ([bool](Get-Process -Name "cs2" -ErrorAction SilentlyContinue)) { if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; New-NetFirewallRule -DisplayName '%s' -Direction Outbound -Action Block -Program '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; break; } Start-Sleep -Milliseconds 500; } Remove-NetFirewallRule -DisplayName '%s';]],
+	local PowerShellScriptRAW = string.format([[Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; netsh advfirewall set allprofiles state on; Get-Process "powershell" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -match '%s' } | Stop-Process -Force; Start-Sleep -Milliseconds 1000; $host.UI.RawUI.WindowTitle = '%s'; while ([bool](Get-Process -Name 'cs2' -ErrorAction SilentlyContinue)) { if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; New-NetFirewallRule -DisplayName '%s' -Direction Outbound -Action Block -Program '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; break; } Start-Sleep -Milliseconds 100; } Remove-NetFirewallRule -DisplayName '%s'; Start-Sleep -Milliseconds 5000; ]],
+
+		TempBridgePath .. '\\' .. cPowerShell_BlockFileName, TempBridgePath .. '\\' .. cPowerShell_UnlockFileName, TempBridgePath .. '\\' .. cPowerShell_ExitFileName,
 
 		cPowerShell_WindowTitle, cPowerShell_WindowTitle,
 
@@ -92,9 +93,6 @@ function InitPowerShellScript()
 		return false
 	end
 
-	PowerShellScriptRAW = PowerShellScriptRAW:gsub("c:\\program files %(x86%)", "C:\\PROGRA~2")
-	PowerShellScriptRAW = PowerShellScriptRAW:gsub("C:\\Program Files %(x86%)", "C:\\PROGRA~2")
-
 	local bResult, hInstance = pcall(function()
 		return Shell32.ShellExecuteA(nil,
 				 		"runas",
@@ -105,7 +103,7 @@ function InitPowerShellScript()
 	end)
 
 	if bResult and tonumber(ffi.cast("intptr_t", hInstance)) > 32 then
-		print("[+] Launched successfully")
+		print("[+] Lua should launch successfully")
 	else
 		print("[-] Please relaunch Lua with admin rights")
 		return false
@@ -197,10 +195,9 @@ local cCurrentVersion = "v1.0"
 
 function CheckForUpdates()
 	local cExpectedVesion = http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt")
-	
-	if string.find(cExpectedVesion, cCurrentVersion) then
-		-- Do nothing :)
-	else
+	print("[!] Your lua version is: " .. cCurrentVersion)
+
+	if string.find(cExpectedVesion, cCurrentVersion) == nil then
 		print("[!] New version is out, get it on github.com/0neLucky0neee/Aimware_Luas")
 	end
 end
