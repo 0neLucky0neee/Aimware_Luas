@@ -191,7 +191,7 @@ function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.2"
+local cCurrentVersion = "v1.3"
 
 function CheckForUpdates()
 	local cExpectedVesion = http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt")
