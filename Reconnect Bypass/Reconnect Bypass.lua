@@ -191,12 +191,17 @@ function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.3"
+local cCurrentVersion = "v1.4"
 
 function CheckForUpdates()
 	local cExpectedVesion = http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt")
 	print("[!] Your lua version is: " .. cCurrentVersion)
 
+	if cExpectedVesion == nil then
+		print("[-] Unable to receive the latest version")
+		return
+	end
+	
 	if string.find(cExpectedVesion, cCurrentVersion) == nil then
 		print("[!] New version is out, get it on github.com/0neLucky0neee/Aimware_Luas")
 	end
