@@ -22,6 +22,9 @@ Follow these steps:
 
 **[UPDATE V1.4] 16.06**
 - Fixed an issue that caused a crash when the network connection was unstable.
-  
+**[UPDATE V1.3] 14.06**
+- The script now **automatically** enables Windows Firewall before applying changes. If it failed to work previously, or if you are using a tweaked OS, launch the script, wait 10 seconds and reboot.
+- Fixed an issue preventing the menu from closing if you had a different keybind for it.
+
 ### Video Demonstration
 [![Watch the video](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/Video-Preview.png)](https://youtu.be/YLrvdHOrXCM)
