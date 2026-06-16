@@ -21,7 +21,7 @@ Follow these steps:
 7. **Done, now you can rejoin the match even after votekick**
 
 **[UPDATE V1.4] 16.06**
-- Fixed an issue that caused a crash when the network connection was unstable.
+- Fixed an issue that may cause a crash when the network connection was unstable.
 
 **[UPDATE V1.3] 14.06**
 - The script now **automatically** enables Windows Firewall before applying changes. If it failed to work previously, or if you are using a tweaked OS, launch the script, wait 10 seconds and reboot.
