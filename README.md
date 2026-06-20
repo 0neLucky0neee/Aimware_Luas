@@ -20,6 +20,9 @@ Follow these steps:
 6. **Activate when needed:** as soon as votekick starts against you, press **"Enable"** button
 7. **Done, now you can rejoin the match even after votekick**
 
+**[UPDATE V1.5] 20.06**
+- Small improvements.
+
 **[UPDATE V1.4] 16.06**
 - Fixed an issue that may cause a crash when the network connection was unstable.
 
