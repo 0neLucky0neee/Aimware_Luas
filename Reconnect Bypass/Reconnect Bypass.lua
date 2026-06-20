@@ -12,6 +12,8 @@ ffi.cdef[[
 local SW_HIDE = 0x0
 local SW_SHOW = 0x5
 
+local SW_POWERSHELL = SW_HIDE
+
 local ERROR_SUCCESS = 0x0
 
 local HKEY_CURRENT_USER 	= ffi.cast("void*", 0x80000001)
@@ -99,7 +101,7 @@ function InitPowerShellScript()
 						"powershell.exe",
 						'-ExecutionPolicy Bypass -WindowStyle Hidden -Command "' .. PowerShellScriptRAW .. '"',
 						nil,
-						SW_HIDE)
+						SW_POWERSHELL)
 	end)
 
 	if bResult and tonumber(ffi.cast("intptr_t", hInstance)) > 32 then
@@ -191,21 +193,24 @@ function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.4"
+local cCurrentVersion = "v1.5"
 
 function CheckForUpdates()
-	local cExpectedVesion = http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt")
-	print("[!] Your lua version is: " .. cCurrentVersion)
+	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt", function(cExpectedVesion)
+		print("[!] Your lua version is: " .. cCurrentVersion)
 
-	if cExpectedVesion == nil then
-		print("[-] Unable to receive the latest version")
-		return
-	end
+		if cExpectedVesion == nil then
+			print("[-] Unable to receive the latest version")
+			return
+		end
 	
-	if string.find(cExpectedVesion, cCurrentVersion) == nil then
-		print("[!] New version is out, get it on github.com/0neLucky0neee/Aimware_Luas")
+		if string.find(cExpectedVesion, cCurrentVersion) == nil then
+			print("[!] New version is out, get it on github.com/0neLucky0neee/Aimware_Luas")
+		end
 	end
+	)
 end
+
 --------------  / Callback \ --------------
 callbacks.Register("Unload", "Reconnect Bypass unloader", function() CreateActionFile(cPowerShell_ExitFileName) callbacks.Unregister("Unload", "Reconnect Bypass unloader") end)
 ----------------  / Main \ ----------------
