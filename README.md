@@ -1,5 +1,5 @@
 # Reconnect Bypass
-A lua script designed to allow you to reconnect after getting kicked or receiving griefing cooldown.
+A lua script designed to allow you to reconnect after getting kicked and to prevent griefing cooldowns.
 ![Preview](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/preview.png)
 
 ## How to use
