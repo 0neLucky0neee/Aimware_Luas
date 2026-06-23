@@ -1,3 +1,5 @@
+local DEBUG_STATUS = false
+
 ffi.cdef[[
 	int RegOpenKeyExA(void* hKey, const char* lpSubKey, unsigned long ulOptions, unsigned long samDesired, void** phkResult);
 	int RegQueryValueExA(void* hKey, const char* lpValueName, unsigned long* lpReserved, unsigned long* lpType, unsigned char* lpData, unsigned long* lpcbData);
@@ -13,6 +15,10 @@ local SW_HIDE = 0x0
 local SW_SHOW = 0x5
 
 local SW_POWERSHELL = SW_HIDE
+
+if DEBUG_STATUS == true then
+	SW_POWERSHELL = SW_SHOW
+end
 
 local ERROR_SUCCESS = 0x0
 
@@ -95,11 +101,18 @@ function InitPowerShellScript()
 		return false
 	end
 
+	local PowerShellScriptFULL = '-ExecutionPolicy Bypass -WindowStyle Hidden -Command "' .. PowerShellScriptRAW .. '"'
+
+	if DEBUG_STATUS == true then
+		PowerShellScriptFULL = '-NoExit ' .. PowerShellScriptFULL
+		print("Powershell script:" .. PowerShellScriptRAW)
+	end
+
 	local bResult, hInstance = pcall(function()
 		return Shell32.ShellExecuteA(nil,
 				 		"runas",
 						"powershell.exe",
-						'-ExecutionPolicy Bypass -WindowStyle Hidden -Command "' .. PowerShellScriptRAW .. '"',
+						PowerShellScriptFULL,
 						nil,
 						SW_POWERSHELL)
 	end)
