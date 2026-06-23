@@ -210,7 +210,7 @@ local cCurrentVersion = "v1.5"
 
 function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt", function(cExpectedVesion)
-		print("[!] Your lua version is: " .. cCurrentVersion)
+		print("[!] Your Reconnect Bypass lua version is: " .. cCurrentVersion)
 
 		if cExpectedVesion == nil then
 			print("[-] Unable to receive the latest version")
