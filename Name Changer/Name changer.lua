@@ -6,20 +6,20 @@ local NULL = 0x0
 
 local ENGINE2_DLL_NAME = "engine2.dll"
 
--- 0x180685698 - 0x180000000 			= 0x685698
+-- 0x180685698 - 0x180000000 					= 0x685698
 local cVTable_Address_VEngineCvar007_offset 	= NULL
 
--- 0x1803FC080 - 0x180000000 			= 0x3FC080
-local cResolveConVar_offset 			= NULL
+-- 0x1803FC080 - 0x180000000 					= 0x3FC080
+local cResolveConVar_offset 					= NULL
 
--- rcx_2 + 0x58 ->		0x58 / 0x8 	= 0xB
-local cVTable_FindConVar_offset 		= 0xB
+-- rcx_2 + 0x58 ->				0x58 / 0x8 		= 0xB
+local cVTable_FindConVar_offset 				= 0xB
 
 -- var_b0 + 0x30
-local cConVarFlags 				= 0x30
+local cConVarFlags 								= 0x30
 
-local FCVAR_DEVELOPMENTONLY			= 0x2
-local FCVAR_USERINFO				= 0x200
+local FCVAR_DEVELOPMENTONLY						= 0x2
+local FCVAR_USERINFO							= 0x200
 
 local function getOffsetFromPattern(cDllName, cPattern, cPatternOffset, cInstrSize)
 	local cPatternLocation = mem.FindPattern(cDllName, cPattern)
@@ -29,7 +29,7 @@ end
 
 -- I hope those patterns won't break
 cVTable_Address_VEngineCvar007_offset 	= getOffsetFromPattern(ENGINE2_DLL_NAME, "48 8B 0D ?? ?? ?? ?? 48 8B 16 48 89 7C 24 ?? 4C 89 4C 24 ??", 3, 7)
-cResolveConVar_offset			= getOffsetFromPattern(ENGINE2_DLL_NAME, "48 8B D3 E8 ?? ?? ?? ?? 48 8B 44 24", 4, 8)
+cResolveConVar_offset					= getOffsetFromPattern(ENGINE2_DLL_NAME, "48 8B D3 E8 ?? ?? ?? ?? 48 8B 44 24", 4, 8)
 
 -- print("VEngineCvar007: " .. string.format("0x%X", cVTable_Address_VEngineCvar007_offset))
 -- print("ResolveConVarFunction: " .. string.format("0x%X", cResolveConVar_offset))
