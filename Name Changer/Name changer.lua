@@ -1,6 +1,6 @@
-pcall(ffi.cdef, [[
+ffi.cdef[[
 	void* GetModuleHandleA(const char* lpModuleName);
-]])
+]]
 
 local NULL = 0x0
 
