@@ -225,7 +225,7 @@ end
 
 --------------  / Callback \ --------------
 
-ReconnectBypass_Window_Ref 		= gui.Window("var_reconnect_bypass_window_0", "Reconnect Bypass", 220, 90, 500, 270)
+ReconnectBypass_Window_Ref 			= gui.Window("var_reconnect_bypass_window_0", "Reconnect Bypass", 220, 90, 500, 270)
 
 ReconnectBypass_Menu_GroupBox_Ref 		= gui.Groupbox(ReconnectBypass_Window_Ref, "Controller", 20, 15, 150, 80)
 ReconnectBypass_Enable_Button_Ref 		= gui.Button(ReconnectBypass_Menu_GroupBox_Ref, "Enable", BlockSteamOutConnection)
@@ -240,7 +240,10 @@ ReconnectBypassInfo_Text_Ref 			= gui.Text(ReconnectBypassInfo_GroupBox_Ref, cRe
 ReconnectBypass_Window_Ref:SetOpenKey(gui.GetValue("adv.menukey"))
 
 --------------  / Callback \ --------------
-callbacks.Register("Unload", function() CreateActionFile(cPowerShell_ExitFileName) end)
+callbacks.Register("Unload", "p909dlaspdko21dasd", function() 
+	callbacks.Unregister("Unload", "p909dlaspdko21dasd") 
+	CreateActionFile(cPowerShell_ExitFileName) 
+end)
 ----------------  / Main \ ----------------
 CheckForUpdates()
 GetSteamPath()
