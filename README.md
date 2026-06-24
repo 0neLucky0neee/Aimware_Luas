@@ -59,5 +59,9 @@ Follow these steps:
    * **Misc** -> **Features** -> **Clan-tag/Name-tag**
 5. **Done! The clan-tag will be applied**
 
+**[UPDATE V1.3] 25.06**
+- Added a "Fake name" option
+- Small improvements
+
 ### Video Demonstration
 [![Watch the video](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/Video-Preview.png)](https://youtu.be/zgc45_dN5yI)
