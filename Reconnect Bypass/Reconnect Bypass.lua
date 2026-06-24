@@ -116,7 +116,7 @@ local function InitPowerShellScript()
 	end)
 
 	if bResult and tonumber(ffi.cast("intptr_t", hInstance)) > 32 then
-		print("[+] Lua should launch successfully")
+		print("[+] Lua should work successfully")
 	else
 		print("[-] Please relaunch Lua with admin rights")
 		return false
@@ -195,6 +195,7 @@ local bPowerShellWasInit = false
 local function BlockSteamOutConnection()
 	if bPowerShellWasInit == false then
 		InitPowerShellScript()
+		GetSteamPath()
 		bPowerShellWasInit = true
 	end
 
@@ -207,6 +208,7 @@ end
 local function UnlockSteamOutConnection()
 	if bPowerShellWasInit == false then
 		InitPowerShellScript()
+		GetSteamPath()
 		bPowerShellWasInit = true
 	end
 
@@ -216,7 +218,7 @@ local function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.6"
+local cCurrentVersion = "v1.6.3"
 
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt", function(cExpectedVesion)
@@ -257,4 +259,3 @@ callbacks.Register("Unload", "p909dlaspdko21dasd", function()
 end)
 ----------------  / Main \ ----------------
 CheckForUpdates()
-GetSteamPath()
