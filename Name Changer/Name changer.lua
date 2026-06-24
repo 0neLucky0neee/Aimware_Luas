@@ -266,10 +266,14 @@ CheckForUpdates()
 
 -------------------/\-------------------
 
-callbacks.Register("CreateMove", NameChangerLogicHandler)
-callbacks.Register("Draw", NameChangerMenuHandler)
-callbacks.Register("Unload", function()
-	if bNameWasSaved and NameChanger_Combobox_ref:GetValue() ~= 0 then
+callbacks.Register("CreateMove", "ndwadi12jasd1d123rcada", NameChangerLogicHandler)
+callbacks.Register("Draw", "d21pas0ddjiajldj21dasdq", NameChangerMenuHandler)
+callbacks.Register("Unload", "lpl549pswqokswos12s21", function()
+	callbacks.Unregister("CreateMove", "ndwadi12jasd1d123rcada")
+	callbacks.Unregister("Draw", "d21pas0ddjiajldj21dasdq")
+	callbacks.Unregister("Unload", "lpl549pswqokswos12s21")
+
+	if bNameWasSaved then
 		DisabledClantagHendler()
 	end
 end)
