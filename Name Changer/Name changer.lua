@@ -243,7 +243,7 @@ function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.0"
+local cCurrentVersion = "v1.1"
 function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
