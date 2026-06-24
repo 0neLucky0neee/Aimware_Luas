@@ -1,6 +1,6 @@
-ffi.cdef[[
+pcall(ffi.cdef, [[
 	void* GetModuleHandleA(const char* lpModuleName);
-]]
+]])
 
 local NULL = 0x0
 
@@ -243,7 +243,7 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.2"
+local cCurrentVersion = "v1.3"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
