@@ -266,8 +266,8 @@ CheckForUpdates()
 
 -------------------/\-------------------
 
-callbacks.Register("CreateMove", "magicnsdandwada", NameChangerLogicHandler)
-callbacks.Register("Draw", "magicawepopo", NameChangerMenuHandler)
+callbacks.Register("CreateMove", NameChangerLogicHandler)
+callbacks.Register("Draw", NameChangerMenuHandler)
 callbacks.Register("Unload", function()
 	if bNameWasSaved and NameChanger_Combobox_ref:GetValue() ~= 0 then
 		DisabledClantagHendler()
