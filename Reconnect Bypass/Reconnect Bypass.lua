@@ -191,7 +191,13 @@ local function CreateActionFile(FileName)
 end
 
 -------------- / Function_4 \ --------------
+local bPowerShellWasInit = false
 local function BlockSteamOutConnection()
+	if bPowerShellWasInit == false then
+		InitPowerShellScript()
+		bPowerShellWasInit = true
+	end
+
 	if CreateActionFile(cPowerShell_BlockFileName) then
 		ReconnectBypassStatus_Text_Ref:SetText(cReconnectBypassStatus_Text_Active .. "\n ")
 		bReconnectBypassStatusEnabled = true
@@ -199,6 +205,11 @@ local function BlockSteamOutConnection()
 end
 -------------- / Function_5 \ --------------
 local function UnlockSteamOutConnection()
+	if bPowerShellWasInit == false then
+		InitPowerShellScript()
+		bPowerShellWasInit = true
+	end
+
 	if CreateActionFile(cPowerShell_UnlockFileName) then
 		ReconnectBypassStatus_Text_Ref:SetText(cReconnectBypassStatus_Text_Disabled .. "\n ")
 		bReconnectBypassStatusEnabled = false
@@ -247,4 +258,3 @@ end)
 ----------------  / Main \ ----------------
 CheckForUpdates()
 GetSteamPath()
-InitPowerShellScript()
