@@ -1,6 +1,6 @@
-pcall(ffi.cdef, [[
+ffi.cdef[[
 	void* GetModuleHandleA(const char* lpModuleName);
-]])
+]]
 
 local NULL = 0x0
 
@@ -81,7 +81,7 @@ local NameChanger_Combobox_ref = gui.Combobox(Aimware_Misc_Features_ref, "var_Na
 local NameChanger_Clantag_Editbox_ref = gui.Editbox(Aimware_Misc_Features_ref, "var_NameChanger_Clantag_Editbox", "")
 -------------------\/-------------------
 
-function GetMagicSymbols(iCount)
+local function GetMagicSymbols(iCount)
 	local magiсSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
 	local result = ""
 
@@ -94,33 +94,33 @@ function GetMagicSymbols(iCount)
 end
 
 local cOldRealName = " "
-function SaveRealPlayerName(cRealPlayerName)
+local function SaveRealPlayerName(cRealPlayerName)
 	cOldRealName = cRealPlayerName
 end
 
-function GetRealPlayerName()
+local function GetRealPlayerName()
 	return cOldRealName
 end
 
-function SetUserNameAndClantag(cClantagWithName)
+local function SetUserNameAndClantag(cClantagWithName)
 	client.Command("name " .. cClantagWithName, true)
 	client.Command("setinfo name " .. '"' .. cClantagWithName .. '"', true)
 end
 
-function DisabledClantagHendler()
+local function DisabledClantagHendler()
 	SetUserNameAndClantag(cOldRealName)
 end
 
-function StaticClantagHendler()
+local function StaticClantagHendler()
 	SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName)
 end
 
-function FakeNameHendler()
+local function FakeNameHendler()
 	SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString())
 end
 
 local fakeChanged = false
-function StaticRadarClantagHendler()
+local function StaticRadarClantagHendler()
 	if fakeChanged then
 		SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName)
 		fakeChanged = false
@@ -130,12 +130,12 @@ function StaticRadarClantagHendler()
 	end
 end
 
-function MinecraftEnchantmentClantagHendler()
+local function MinecraftEnchantmentClantagHendler()
 	SetUserNameAndClantag(GetMagicSymbols(math.random(10, 16)))
 end
 
 -- local fakeChanged = false
-function RadarExploitClantagHendler()
+local function RadarExploitClantagHendler()
 	if fakeChanged then
 		SetUserNameAndClantag(cOldRealName)
 		fakeChanged = false
@@ -148,7 +148,7 @@ end
 local bNameWasSaved = false
 local bNameWasChanged = false
 local cLastTimeChanged_createmove = -1
-function NameChangerLogicHandler(cmd)
+local function NameChangerLogicHandler(cmd)
 	if bNameWasSaved == false then
 		local pLocalPLayerEnt = entities.GetLocalPlayer()
 		if pLocalPLayerEnt:IsPlayer() and pLocalPLayerEnt:IsAlive() then
@@ -205,7 +205,7 @@ function NameChangerLogicHandler(cmd)
 end
 
 local cLastTimeChanged_draw = -1
-function NameChangerMenuHandler()
+local function NameChangerMenuHandler()
 	if (globals.CurTime() - cLastTimeChanged_draw) > 0.01 then
 		cLastTimeChanged_draw = globals.CurTime()
 		local ComboboxValue = NameChanger_Combobox_ref:GetValue()
@@ -243,8 +243,8 @@ function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.1"
-function CheckForUpdates()
+local cCurrentVersion = "v1.2"
+local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
 
