@@ -40,25 +40,6 @@ local cReconnectBypassStatus_Text_Active 	= "Status: Active"
 local cReconnectBypassStatus_Text_Disabled 	= "Status: Disabled"
 local cReconnectBypassStatus_Text_Unknown 	= "Status: Unknown"
 
-local cReconnectBypassInfo_Text = 	" Getting kicked by team? Wanna Grief teammate? \n\n" ..
-					" Go ahead! Enable it!\n\n\n\n" ..
-					" You should be able to reconnect for about ~2minutes, \n\n" ..
-					" as many times as you like!"
-
-local ReconnectBypass_Window_Ref 		= gui.Window("var_reconnect_bypass_window_0", "Reconnect Bypass", 220, 90, 500, 270)
-
-local ReconnectBypass_Menu_GroupBox_Ref 	= gui.Groupbox(ReconnectBypass_Window_Ref, "Controller", 20, 15, 150, 80)
-local ReconnectBypass_Enable_Button_Ref 	= gui.Button(ReconnectBypass_Menu_GroupBox_Ref, "Enable", BlockSteamOutConnection)
-local ReconnectBypass_Disable_Button_Ref 	= gui.Button(ReconnectBypass_Menu_GroupBox_Ref, "Disable", UnlockSteamOutConnection)
-
-local ReconnectBypassStatus_GroupBox_Ref 	= gui.Groupbox(ReconnectBypass_Window_Ref, "Status Information", 20, (15 + 80) + 15 + 20, 150, 80)
-local ReconnectBypassStatus_Text_Ref 		= gui.Text(ReconnectBypassStatus_GroupBox_Ref, cReconnectBypassStatus_Text_Unknown .. "\n ")
-
-local ReconnectBypassInfo_GroupBox_Ref 		= gui.Groupbox(ReconnectBypass_Window_Ref, "When should I turn it on?", (150 + 20) + 20, 15, 295, ((15 + 80) + 15 + 20) + 80)
-local ReconnectBypassInfo_Text_Ref 		= gui.Text(ReconnectBypassInfo_GroupBox_Ref, cReconnectBypassInfo_Text)
-
-ReconnectBypass_Window_Ref:SetOpenKey(gui.GetValue("adv.menukey"))
-
 local bReconnectBypassStatusEnabled 		= -1
 
 local cPowerShell_BlockFileName 	= "FILE_ENABLE.dat"
@@ -74,8 +55,25 @@ local cSteamExeRegName  = "SteamExe"
 
 local TempBridgePath 	= ""
 
+local cReconnectBypassInfo_Text = 	" Getting kicked by team? Wanna Grief teammate? \n\n" ..
+					" Go ahead! Enable it!\n\n\n\n" ..
+					" You should be able to reconnect for about ~2minutes, \n\n" ..
+					" as many times as you like!"
+
+local ReconnectBypass_Window_Ref 		= nil
+
+local ReconnectBypass_Menu_GroupBox_Ref 	= nil
+local ReconnectBypass_Enable_Button_Ref 	= nil
+local ReconnectBypass_Disable_Button_Ref 	= nil
+
+local ReconnectBypassStatus_GroupBox_Ref 	= nil
+local ReconnectBypassStatus_Text_Ref 		= nil
+
+local ReconnectBypassInfo_GroupBox_Ref 		= nil
+local ReconnectBypassInfo_Text_Ref 		= nil
+
 -------------- / Function_1 \ --------------
-function InitPowerShellScript()
+local function InitPowerShellScript()
 	TempBridgePath = cFullSteamPath:gsub("\\steam%.exe", "")
 
 	local PowerShellScriptRAW = string.format([[Start-Sleep -Milliseconds 500; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%s' -Force -ErrorAction SilentlyContinue; Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\mpssvc' -Name 'Start' -Value 2;  Start-Sleep -Milliseconds 500; net start mpssvc; Start-Sleep -Milliseconds 500; netsh advfirewall set allprofiles state on; Get-Process "powershell" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -match '%s' } | Stop-Process -Force; Start-Sleep -Milliseconds 1000; $host.UI.RawUI.WindowTitle = '%s'; while ([bool](Get-Process -Name 'cs2' -ErrorAction SilentlyContinue)) { if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; New-NetFirewallRule -DisplayName '%s' -Direction Outbound -Action Block -Program '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; } if (Test-Path -Path '%s') { Start-Sleep -Milliseconds 200; Remove-Item -Path '%s' -Force; Remove-NetFirewallRule -DisplayName '%s'; break; } Start-Sleep -Milliseconds 100; } Remove-NetFirewallRule -DisplayName '%s'; Start-Sleep -Milliseconds 5000; ]],
@@ -127,7 +125,7 @@ function InitPowerShellScript()
 	return true
 end
 -------------- / Function_2 \ --------------
-function GetSteamPath()
+local function GetSteamPath()
 	if not Advapi32 then
 		cFullSteamPath = cBackupSteamPath
 	end
@@ -170,7 +168,7 @@ function GetSteamPath()
 	end
 end
 -------------- / Function_3 \ --------------
-function CreateActionFile(FileName)
+local function CreateActionFile(FileName)
 	if not Kernel32 then
 		print("[-] Something went wrong")
 		return false
@@ -191,24 +189,25 @@ function CreateActionFile(FileName)
 
 	return true
 end
+
 -------------- / Function_4 \ --------------
-function BlockSteamOutConnection()
+local function BlockSteamOutConnection()
 	if CreateActionFile(cPowerShell_BlockFileName) then
 		ReconnectBypassStatus_Text_Ref:SetText(cReconnectBypassStatus_Text_Active .. "\n ")
 		bReconnectBypassStatusEnabled = true
 	end
 end
 -------------- / Function_5 \ --------------
-function UnlockSteamOutConnection()
+local function UnlockSteamOutConnection()
 	if CreateActionFile(cPowerShell_UnlockFileName) then
 		ReconnectBypassStatus_Text_Ref:SetText(cReconnectBypassStatus_Text_Disabled .. "\n ")
 		bReconnectBypassStatusEnabled = false
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.5"
+local cCurrentVersion = "v1.6"
 
-function CheckForUpdates()
+local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt", function(cExpectedVesion)
 		print("[Reconnect Bypass] Your lua version is: " .. cCurrentVersion)
 
@@ -225,7 +224,23 @@ function CheckForUpdates()
 end
 
 --------------  / Callback \ --------------
-callbacks.Register("Unload", "Reconnect Bypass unloader", function() CreateActionFile(cPowerShell_ExitFileName) callbacks.Unregister("Unload", "Reconnect Bypass unloader") end)
+
+ReconnectBypass_Window_Ref 		= gui.Window("var_reconnect_bypass_window_0", "Reconnect Bypass", 220, 90, 500, 270)
+
+ReconnectBypass_Menu_GroupBox_Ref 		= gui.Groupbox(ReconnectBypass_Window_Ref, "Controller", 20, 15, 150, 80)
+ReconnectBypass_Enable_Button_Ref 		= gui.Button(ReconnectBypass_Menu_GroupBox_Ref, "Enable", BlockSteamOutConnection)
+ReconnectBypass_Disable_Button_Ref 		= gui.Button(ReconnectBypass_Menu_GroupBox_Ref, "Disable", UnlockSteamOutConnection)
+
+ReconnectBypassStatus_GroupBox_Ref 		= gui.Groupbox(ReconnectBypass_Window_Ref, "Status Information", 20, (15 + 80) + 15 + 20, 150, 80)
+ReconnectBypassStatus_Text_Ref 			= gui.Text(ReconnectBypassStatus_GroupBox_Ref, cReconnectBypassStatus_Text_Unknown .. "\n ")
+
+ReconnectBypassInfo_GroupBox_Ref 		= gui.Groupbox(ReconnectBypass_Window_Ref, "When should I turn it on?", (150 + 20) + 20, 15, 295, ((15 + 80) + 15 + 20) + 80)
+ReconnectBypassInfo_Text_Ref 			= gui.Text(ReconnectBypassInfo_GroupBox_Ref, cReconnectBypassInfo_Text)
+
+ReconnectBypass_Window_Ref:SetOpenKey(gui.GetValue("adv.menukey"))
+
+--------------  / Callback \ --------------
+callbacks.Register("Unload", function() CreateActionFile(cPowerShell_ExitFileName) end)
 ----------------  / Main \ ----------------
 CheckForUpdates()
 GetSteamPath()
