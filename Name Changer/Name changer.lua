@@ -150,6 +150,7 @@ function NameChangerLogicHandler(cmd)
 		if pLocalPLayerEnt:IsPlayer() and pLocalPLayerEnt:IsAlive() then
 			SaveRealPlayerName(pLocalPLayerEnt:GetName())
 			bNameWasSaved = true
+			patchConVar("name")
 			return
 		else
 			return
@@ -247,7 +248,6 @@ end
 -------------------/\-------------------
 
 CheckForUpdates()
-patchConVar("name")
 
 -------------------/\-------------------
 
