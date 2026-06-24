@@ -1,6 +1,6 @@
-ffi.cdef[[
+pcall(ffi.cdef, [[
 	void* GetModuleHandleA(const char* lpModuleName);
-]]
+]])
 
 local NULL = 0x0
 
@@ -76,7 +76,7 @@ end
 
 -------------------/\-------------------
 local Aimware_Misc_Features_ref = gui.Reference("Miscellaneous", "Features")
-local NameChanger_Combobox_ref = gui.Combobox(Aimware_Misc_Features_ref, "var_NameChanger_Listbox", "Clan-tag/Name-tag", "Disabled", "Static", "Static | Radar", "Minecraft enchantment | Radar", "Radar Exploit")
+local NameChanger_Combobox_ref = gui.Combobox(Aimware_Misc_Features_ref, "var_NameChanger_Listbox", "Clan-tag/Name-tag", "Disabled", "Fake name", "Static", "Static | Radar", "Minecraft enchantment | Radar", "Radar Exploit")
 
 local NameChanger_Clantag_Editbox_ref = gui.Editbox(Aimware_Misc_Features_ref, "var_NameChanger_Clantag_Editbox", "")
 -------------------\/-------------------
@@ -113,6 +113,10 @@ end
 
 function StaticClantagHendler()
 	SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName)
+end
+
+function FakeNameHendler()
+	SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString())
 end
 
 local fakeChanged = false
@@ -168,26 +172,32 @@ function NameChangerLogicHandler(cmd)
 			bNameWasChanged = false
 		end
 	
-		-- Static
+		-- Fake name
 		if ComboboxValue == 1 then
+			FakeNameHendler()
+			bNameWasChanged = true
+		end
+
+		-- Static
+		if ComboboxValue == 2 then
 			StaticClantagHendler()
 			bNameWasChanged = true
 		end
 
 		-- Static | Radar
-		if ComboboxValue == 2 then
+		if ComboboxValue == 3 then
 			StaticRadarClantagHendler()
 			bNameWasChanged = true
 		end
 
 		-- Minecraft enchantment | Radar
-		if ComboboxValue == 3 then
+		if ComboboxValue == 4 then
 			MinecraftEnchantmentClantagHendler()
 			bNameWasChanged = true
 		end
 
 		-- Radar Exploit
-		if ComboboxValue == 4 then
+		if ComboboxValue == 5 then
 			RadarExploitClantagHendler()
 			bNameWasChanged = true
 		end
@@ -206,23 +216,28 @@ function NameChangerMenuHandler()
 			NameChanger_Clantag_Editbox_ref:SetInvisible(true)
 		end
 	
-		-- Static
+		-- Fake name
 		if ComboboxValue == 1 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
 		end
 
-		-- Static | Radar
+		-- Static
 		if ComboboxValue == 2 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
 		end
 
-		-- Minecraft enchantment | Radar
+		-- Static | Radar
 		if ComboboxValue == 3 then
+			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
+		end
+
+		-- Minecraft enchantment | Radar
+		if ComboboxValue == 4 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(true)
 		end
 
 		-- Radar Exploit
-		if ComboboxValue == 4 then
+		if ComboboxValue == 5 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(true)
 		end
 	end
@@ -254,9 +269,6 @@ CheckForUpdates()
 callbacks.Register("CreateMove", "magicnsdandwada", NameChangerLogicHandler)
 callbacks.Register("Draw", "magicawepopo", NameChangerMenuHandler)
 callbacks.Register("Unload", function()
-	callbacks.Unregister("CreateMove", "magicnsdandwada")
-	callbacks.Unregister("Draw", "magicawepopo")
-	
 	if bNameWasSaved and NameChanger_Combobox_ref:GetValue() ~= 0 then
 		DisabledClantagHendler()
 	end
