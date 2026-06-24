@@ -243,18 +243,18 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.3"
+local cCurrentVersion = "v1.3.1"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
 
 		if cExpectedVesion == nil then
-			print("[-] Unable to receive the latest version")
+			print("[Name Changer] Unable to receive the latest version")
 			return
 		end
 	
 		if string.find(cExpectedVesion, cCurrentVersion) == nil then
-			print("[!] New version is out, get it on github.com/0neLucky0neee/Aimware_Luas")
+			print("[Name Changer] New version is out, get it on github.com/0neLucky0neee/Aimware_Luas")
 		end
 	end
 	)
