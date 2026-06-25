@@ -194,8 +194,8 @@ end
 local bPowerShellWasInit = false
 local function BlockSteamOutConnection()
 	if bPowerShellWasInit == false then
-		InitPowerShellScript()
 		GetSteamPath()
+		InitPowerShellScript()
 		bPowerShellWasInit = true
 	end
 
@@ -207,8 +207,8 @@ end
 -------------- / Function_5 \ --------------
 local function UnlockSteamOutConnection()
 	if bPowerShellWasInit == false then
-		InitPowerShellScript()
 		GetSteamPath()
+		InitPowerShellScript()
 		bPowerShellWasInit = true
 	end
 
@@ -218,7 +218,7 @@ local function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.7.0"
+local cCurrentVersion = "v1.7.1"
 
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt", function(cExpectedVesion)
