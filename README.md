@@ -25,6 +25,10 @@ Follow these steps:
 6. **Activate when needed:** as soon as votekick starts against you, press **"Enable"** button
 7. **Done, now you can rejoin the match even after votekick**
 
+**[UPDATE V1.7.0] 25.06**
+- Improved stability
+- Better version management
+
 **[UPDATE V1.6] 25.06**
 - Big improvements.
 - Staring from now: the script will be loading on the first attempt.
