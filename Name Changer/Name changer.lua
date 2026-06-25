@@ -145,10 +145,16 @@ local function RadarExploitClantagHendler()
 	end
 end
 
+local bForceExit = false
+
 local bNameWasSaved = false
 local bNameWasChanged = false
-local cLastTimeChanged_createmove = -1
-local function NameChangerLogicHandler(cmd)
+local cLastTimeChanged_logic = -1
+local function NameChangerLogicHandler()
+	if bForceExit then
+		return
+	end
+
 	if bNameWasSaved == false then
 		local pLocalPLayerEnt = entities.GetLocalPlayer()
 		if pLocalPLayerEnt:IsPlayer() and pLocalPLayerEnt:IsAlive() then
@@ -161,8 +167,8 @@ local function NameChangerLogicHandler(cmd)
 		end
 	end
 
-	if (globals.CurTime() - cLastTimeChanged_createmove) > 0.01 then
-		cLastTimeChanged_createmove = globals.CurTime()
+	if (globals.CurTime() - cLastTimeChanged_logic) > 0.01 then
+		cLastTimeChanged_logic = globals.CurTime()
 		local ComboboxValue = NameChanger_Combobox_ref:GetValue()
 		-- Lmao, switch case doesn't exists in lua
 
@@ -204,10 +210,14 @@ local function NameChangerLogicHandler(cmd)
 	end
 end
 
-local cLastTimeChanged_draw = -1
+local cLastTimeChanged_menu = -1
 local function NameChangerMenuHandler()
-	if (globals.CurTime() - cLastTimeChanged_draw) > 0.01 then
-		cLastTimeChanged_draw = globals.CurTime()
+	if bForceExit then
+		return
+	end
+
+	if (globals.CurTime() - cLastTimeChanged_menu) > 0.01 then
+		cLastTimeChanged_menu = globals.CurTime()
 		local ComboboxValue = NameChanger_Combobox_ref:GetValue()
 		-- Lmao, switch case doesn't exists in lua
 
@@ -243,7 +253,7 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.3.1"
+local cCurrentVersion = "v1.3.2"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
@@ -266,12 +276,10 @@ CheckForUpdates()
 
 -------------------/\-------------------
 
-callbacks.Register("CreateMove", "ndwadi12jasd1d123rcada", NameChangerLogicHandler)
-callbacks.Register("Draw", "d21pas0ddjiajldj21dasdq", NameChangerMenuHandler)
-callbacks.Register("Unload", "lpl549pswqokswos12s21", function()
-	callbacks.Unregister("CreateMove", "ndwadi12jasd1d123rcada")
-	callbacks.Unregister("Draw", "d21pas0ddjiajldj21dasdq")
-	callbacks.Unregister("Unload", "lpl549pswqokswos12s21")
+callbacks.Register("Draw", NameChangerLogicHandler)
+callbacks.Register("Draw", NameChangerMenuHandler)
+callbacks.Register("Unload", function()
+	bForceExit = true
 
 	if bNameWasSaved then
 		DisabledClantagHendler()
