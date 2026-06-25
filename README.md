@@ -25,6 +25,9 @@ Follow these steps:
 6. **Activate when needed:** as soon as votekick starts against you, press **"Enable"** button
 7. **Done, now you can rejoin the match even after votekick**
 
+**[UPDATE V1.7.1] 25.06**
+- Hotfix
+
 **[UPDATE V1.7.0] 25.06**
 - Improved stability
 - Better version management
@@ -57,11 +60,15 @@ Follow these steps:
 
 1. **Enable FFI:** Make sure you turned on "Allow insecure FFI" option, as shown below:
 ![Image](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/LuaSecurity.png)
-2. **Load the script**
-3. **Join any match**
+2. **Join any match**
+3. **Load the script**
 4. **Choose the option:**
    * **Misc** -> **Features** -> **Clan-tag/Name-tag**
 5. **Done! The clan-tag will be applied**
+
+**[UPDATE V1.3.5] 25.06**
+- Another Hotfix
+- Sometimes on reloading cfg username was not restored correctly
 
 **[UPDATE V1.3.4] 25.06**
 - Hotfix
