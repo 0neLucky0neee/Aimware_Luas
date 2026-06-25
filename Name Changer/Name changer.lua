@@ -82,12 +82,12 @@ local NameChanger_Clantag_Editbox_ref = gui.Editbox(Aimware_Misc_Features_ref, "
 -------------------\/-------------------
 
 local function GetMagicSymbols(iCount)
-	local magiсSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+	local magicSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
 	local result = ""
 
 	for i = 1, iCount do
-		local magicIndex = math.random(1, magiсSymbols:len())
-		result = result .. magiсSymbols:sub(magicIndex, magicIndex)
+		local magicIndex = math.random(1, magicSymbols:len())
+		result = result .. magicSymbols:sub(magicIndex, magicIndex)
 	end
 
 	return result
