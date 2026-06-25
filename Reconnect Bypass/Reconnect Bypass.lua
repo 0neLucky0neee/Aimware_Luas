@@ -218,7 +218,7 @@ local function UnlockSteamOutConnection()
 	end
 end
 -------------- / Function_6 \ --------------
-local cCurrentVersion = "v1.6.4"
+local cCurrentVersion = "v1.7.0"
 
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/version.txt", function(cExpectedVesion)
@@ -253,8 +253,7 @@ ReconnectBypassInfo_Text_Ref 			= gui.Text(ReconnectBypassInfo_GroupBox_Ref, cRe
 ReconnectBypass_Window_Ref:SetOpenKey(gui.GetValue("adv.menukey"))
 
 --------------  / Callback \ --------------
-callbacks.Register("Unload", "p909dlaspdko21dasd", function() 
-	callbacks.Unregister("Unload", "p909dlaspdko21dasd") 
+callbacks.Register("Unload", function() 
 	CreateActionFile(cPowerShell_ExitFileName) 
 end)
 ----------------  / Main \ ----------------
