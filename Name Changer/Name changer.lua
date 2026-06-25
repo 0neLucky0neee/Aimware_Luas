@@ -157,11 +157,6 @@ local function NameChangerLogicHandler()
 		return
 	end
 
-	if (globals.CurTime() - cInitTime) < 0.3 then
-		cSpawnTime = globals.CurTime()
-		return
-	end
-
 	local pLocalPLayerEnt = entities.GetLocalPlayer()
 
 	if pLocalPLayerEnt == nil then
@@ -172,6 +167,10 @@ local function NameChangerLogicHandler()
 		return
 	end
 
+	if (globals.CurTime() - cInitTime) < 0.3 then
+		return
+	end
+	
 	if bNameWasSaved == false then
 		print("[+] Name changer should work correctly")
 		
