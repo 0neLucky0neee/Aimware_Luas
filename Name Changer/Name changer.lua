@@ -157,21 +157,44 @@ local function NameChangerLogicHandler()
 		return
 	end
 
-	local pLocalPLayerEnt = entities.GetLocalPlayer()
-
-	if pLocalPLayerEnt == nil then
+	if NameChanger_Combobox_ref:GetValue() == 0 then
 		return
 	end
 
-	if pLocalPLayerEnt:IsPlayer() == false then
+	if globals.CurTime() < cLastTimeChanged_logic then
+		cLastTimeChanged_logic = globals.CurTime()
+	end
+
+	if engine.GetServerIP() == nil then
+		cInitTime = globals.CurTime()
+		bNameWasSaved = false
+		return
+	end
+
+	if engine.GetMapName() == nil or engine.GetMapName() == "" then
+		cInitTime = globals.CurTime()
+		bNameWasSaved = false
+		return
+	end
+
+	local pLocalPLayerEnt = entities.GetLocalPlayer()
+
+	if pLocalPLayerEnt == nil then
+		cInitTime = globals.CurTime()
+		bNameWasSaved = false
 		return
 	end
 
 	if (globals.CurTime() - cInitTime) < 0.3 then
+		bNameWasSaved = false
 		return
 	end
 	
 	if bNameWasSaved == false then
+		if pLocalPLayerEnt:IsPlayer() == false then
+			return
+		end
+
 		print("[+] Name changer should work correctly")
 		
 		SaveRealPlayerName(pLocalPLayerEnt:GetName())
@@ -228,6 +251,10 @@ local function NameChangerMenuHandler()
 		return
 	end
 
+	if globals.CurTime() < cLastTimeChanged_menu then
+		cLastTimeChanged_menu = globals.CurTime()
+	end
+
 	if (globals.CurTime() - cLastTimeChanged_menu) > 0.01 then
 		cLastTimeChanged_menu = globals.CurTime()
 		local ComboboxValue = NameChanger_Combobox_ref:GetValue()
@@ -265,7 +292,7 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.3.6"
+local cCurrentVersion = "v1.3.7"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
@@ -297,10 +324,6 @@ callbacks.Register("Unload", function()
 		local pLocalPLayerEnt = entities.GetLocalPlayer()
 
 		if pLocalPLayerEnt == nil then
-			return
-		end
-
-		if pLocalPLayerEnt:IsPlayer() == false then
 			return
 		end
 
