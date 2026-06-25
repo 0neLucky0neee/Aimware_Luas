@@ -66,6 +66,12 @@ Follow these steps:
    * **Misc** -> **Features** -> **Clan-tag/Name-tag**
 5. **Done! The clan-tag will be applied**
 
+**[UPDATE V1.3.7] 25.06**
+- Logic changes
+- Fixed all possible issues
+- Fixed a crash that occurred when changing maps
+- Fixed clan-tag not applying after a map change
+
 **[UPDATE V1.3.5] 25.06**
 - Another Hotfix
 - Sometimes on reloading cfg username was not restored correctly
