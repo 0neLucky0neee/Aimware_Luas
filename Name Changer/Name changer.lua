@@ -157,13 +157,15 @@ local function NameChangerLogicHandler()
 
 	if bNameWasSaved == false then
 		local pLocalPLayerEnt = entities.GetLocalPlayer()
-		if pLocalPLayerEnt:IsPlayer() and pLocalPLayerEnt:IsAlive() then
-			SaveRealPlayerName(pLocalPLayerEnt:GetName())
-			bNameWasSaved = true
-			patchConVar("name")
-			return
-		else
-			return
+		if pLocalPLayerEnt ~= nil then
+			if pLocalPLayerEnt:IsPlayer() and pLocalPLayerEnt:IsAlive() then
+				SaveRealPlayerName(pLocalPLayerEnt:GetName())
+				bNameWasSaved = true
+				patchConVar("name")
+				return
+			else
+				return
+			end
 		end
 	end
 
@@ -253,7 +255,7 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.3.3"
+local cCurrentVersion = "v1.3.4"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
