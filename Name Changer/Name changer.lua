@@ -145,6 +145,8 @@ local function RadarExploitClantagHendler()
 	end
 end
 
+local cInitTime = globals.CurTime()
+
 local bForceExit = false
 
 local bNameWasSaved = false
@@ -155,10 +157,17 @@ local function NameChangerLogicHandler()
 		return
 	end
 
+	if (globals.CurTime() - cInitTime) < 0.3 then
+		cSpawnTime = globals.CurTime()
+		return
+	end
+
 	if bNameWasSaved == false then
 		local pLocalPLayerEnt = entities.GetLocalPlayer()
+
 		if pLocalPLayerEnt ~= nil then
-			if pLocalPLayerEnt:IsPlayer() and pLocalPLayerEnt:IsAlive() then
+			if pLocalPLayerEnt:IsPlayer() then
+				print("[+] Name changer should work correctly")
 				SaveRealPlayerName(pLocalPLayerEnt:GetName())
 				bNameWasSaved = true
 				patchConVar("name")
@@ -255,7 +264,7 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.3.4"
+local cCurrentVersion = "v1.3.5"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
