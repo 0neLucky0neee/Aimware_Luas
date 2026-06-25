@@ -63,6 +63,14 @@ Follow these steps:
    * **Misc** -> **Features** -> **Clan-tag/Name-tag**
 5. **Done! The clan-tag will be applied**
 
+**[UPDATE V1.3.4] 25.06**
+- Hotfix
+
+**[UPDATE V1.3.3] 25.06**
+- Improved stability
+- Better version management
+- Clan-tag/Name-tag will be applied even if a character not alive
+
 **[UPDATE V1.3] 25.06**
 - Added a "Fake name" option
 - Small improvements
