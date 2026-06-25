@@ -99,11 +99,13 @@ local function InitPowerShellScript()
 		return false
 	end
 
-	local PowerShellScriptFULL = '-ExecutionPolicy Bypass -WindowStyle Hidden -Command "' .. PowerShellScriptRAW .. '"'
+	local PowerShellScriptFULL = '-ExecutionPolicy Bypass -Command "' .. PowerShellScriptRAW .. '"'
 
 	if DEBUG_STATUS == true then
 		PowerShellScriptFULL = '-NoExit ' .. PowerShellScriptFULL
-		print("Powershell script:" .. PowerShellScriptRAW)
+		print("Powershell script:" .. PowerShellScriptFULL)
+	else
+		PowerShellScriptFULL = '-WindowStyle Hidden ' .. PowerShellScriptFULL
 	end
 
 	local bResult, hInstance = pcall(function()
