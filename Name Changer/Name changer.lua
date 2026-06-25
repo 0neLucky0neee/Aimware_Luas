@@ -162,20 +162,22 @@ local function NameChangerLogicHandler()
 		return
 	end
 
-	if bNameWasSaved == false then
-		local pLocalPLayerEnt = entities.GetLocalPlayer()
+	local pLocalPLayerEnt = entities.GetLocalPlayer()
 
-		if pLocalPLayerEnt ~= nil then
-			if pLocalPLayerEnt:IsPlayer() then
-				print("[+] Name changer should work correctly")
-				SaveRealPlayerName(pLocalPLayerEnt:GetName())
-				bNameWasSaved = true
-				patchConVar("name")
-				return
-			else
-				return
-			end
-		end
+	if pLocalPLayerEnt == nil then
+		return
+	end
+
+	if pLocalPLayerEnt:IsPlayer() == false then
+		return
+	end
+
+	if bNameWasSaved == false then
+		print("[+] Name changer should work correctly")
+		
+		SaveRealPlayerName(pLocalPLayerEnt:GetName())
+		bNameWasSaved = true
+		patchConVar("name")
 	end
 
 	if (globals.CurTime() - cLastTimeChanged_logic) > 0.01 then
@@ -264,7 +266,7 @@ local function NameChangerMenuHandler()
 	end
 end
 
-local cCurrentVersion = "v1.3.5"
+local cCurrentVersion = "v1.3.6"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
@@ -292,7 +294,17 @@ callbacks.Register("Draw", NameChangerMenuHandler)
 callbacks.Register("Unload", function()
 	bForceExit = true
 
-	if bNameWasSaved then
+	if bNameWasSaved and NameChanger_Combobox_ref:GetValue() ~= 0 then
+		local pLocalPLayerEnt = entities.GetLocalPlayer()
+
+		if pLocalPLayerEnt == nil then
+			return
+		end
+
+		if pLocalPLayerEnt:IsPlayer() == false then
+			return
+		end
+
 		DisabledClantagHendler()
 	end
 end)
