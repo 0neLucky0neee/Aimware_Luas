@@ -157,10 +157,6 @@ local function NameChangerLogicHandler()
 		return
 	end
 
-	if NameChanger_Combobox_ref:GetValue() == 0 then
-		return
-	end
-
 	if globals.CurTime() < cLastTimeChanged_logic then
 		cLastTimeChanged_logic = globals.CurTime()
 	end
