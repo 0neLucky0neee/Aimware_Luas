@@ -86,7 +86,7 @@ local function GetMagicSymbols(iCount)
 	local result = ""
 
 	for i = 1, iCount do
-		local magicIndex = math.random(1, magicSymbols:len())
+		local magicIndex = math.random(1, magicSymbols:len() - 1)
 		result = result .. magicSymbols:sub(magicIndex, magicIndex)
 	end
 
