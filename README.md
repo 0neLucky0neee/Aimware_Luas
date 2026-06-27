@@ -25,6 +25,9 @@ Follow these steps:
 6. **Activate when needed:** as soon as votekick starts against you, press **"Enable"** button
 7. **Done, now you can rejoin the match even after votekick**
 
+**[UPDATE V1.7.2] 27.06**
+- It is preferably, but no longer necessary to press the "Disable" button at startup
+
 **[UPDATE V1.7.1] 25.06**
 - Hotfix
 
