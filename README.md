@@ -69,6 +69,10 @@ Follow these steps:
    * **Misc** -> **Features** -> **Clan-tag/Name-tag**
 5. **Done! The clan-tag will be applied**
 
+**[UPDATE V1.4.0] 28.06**
+- Added an "Animated" option
+- Fixed a crash that may occur _randomly[/i]_ with "Minecraft" option
+
 **[UPDATE V1.3.7] 25.06**
 - Logic changes
 - Fixed all possible issues
