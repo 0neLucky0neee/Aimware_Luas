@@ -1,6 +1,8 @@
 # Quick Lua bookmarks
 * [**1. Reconnect Bypass**](#Reconnect-Bypass)
-* [**2. Name Changer + Radar Exploit**](#Name-Changer--Radar-Exploit)
+* * [**Updates**](#Reconnect-Bypass-Updates)
+* [**2. Name Changer**](#Name-Changer)
+* * [**Updates**](#Name-Changer-Updates)
 
 # Reconnect Bypass
 A lua script designed to allow you to reconnect after getting kicked and to prevent griefing cooldowns.
@@ -24,6 +26,8 @@ Follow these steps:
 5. **Join any match**
 6. **Activate when needed:** as soon as votekick starts against you, press **"Enable"** button
 7. **Done, now you can rejoin the match even after votekick**
+
+# Reconnect Bypass Updates
 
 **[UPDATE V1.7.2] 27.06**
 - It is preferably, but no longer necessary to press the **"Disable"** button at startup
@@ -52,11 +56,11 @@ Follow these steps:
 ### Video Demonstration
 [![Watch the video](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Reconnect%20Bypass/Assets/Video-Preview.png)](https://youtu.be/YLrvdHOrXCM)
 
-# Name Changer + Radar Exploit
+# Name Changer
 A lua script designed to allow you to change your clan-tag by manipulating the "name" ConVar.
 In addition, it features an option to disappear from radars.
 
-![Preview_Name_Changer_+_radar_exploit](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/preview.png)
+![Preview_Name_Changer](https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/preview.png)
 
 ## How to use
 Follow these steps:
@@ -68,6 +72,8 @@ Follow these steps:
 4. **Choose the option:**
    * **Misc** -> **Features** -> **Clan-tag/Name-tag**
 5. **Done! The clan-tag will be applied**
+
+# Name Changer Updates
 
 **[UPDATE V1.4.0] 28.06**
 - Added an "Animated" option
