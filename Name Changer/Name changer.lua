@@ -12,14 +12,14 @@ local cVTable_Address_VEngineCvar007_offset 	= NULL
 -- 0x1803FC080 - 0x180000000 					= 0x3FC080
 local cResolveConVar_offset 					= NULL
 
--- rcx_2 + 0x58 ->				0x58 / 0x8 		= 0xB
+-- rcx_2 + 0x58 ->				0x58 / 0x8 	= 0xB
 local cVTable_FindConVar_offset 				= 0xB
 
 -- var_b0 + 0x30
-local cConVarFlags 								= 0x30
+local cConVarFlags 						= 0x30
 
-local FCVAR_DEVELOPMENTONLY						= 0x2
-local FCVAR_USERINFO							= 0x200
+local FCVAR_DEVELOPMENTONLY					= 0x2
+local FCVAR_USERINFO						= 0x200
 
 local function getOffsetFromPattern(cDllName, cPattern, cPatternOffset, cInstrSize)
 	local cPatternLocation = mem.FindPattern(cDllName, cPattern)
@@ -29,7 +29,7 @@ end
 
 -- I hope those patterns won't break
 cVTable_Address_VEngineCvar007_offset 	= getOffsetFromPattern(ENGINE2_DLL_NAME, "48 8B 0D ?? ?? ?? ?? 48 8B 16 48 89 7C 24 ?? 4C 89 4C 24 ??", 3, 7)
-cResolveConVar_offset					= getOffsetFromPattern(ENGINE2_DLL_NAME, "48 8B D3 E8 ?? ?? ?? ?? 48 8B 44 24", 4, 8)
+cResolveConVar_offset			= getOffsetFromPattern(ENGINE2_DLL_NAME, "48 8B D3 E8 ?? ?? ?? ?? 48 8B 44 24", 4, 8)
 
 -- print("VEngineCvar007: " .. string.format("0x%X", cVTable_Address_VEngineCvar007_offset))
 -- print("ResolveConVarFunction: " .. string.format("0x%X", cResolveConVar_offset))
@@ -75,18 +75,28 @@ local function patchConVar(cConVarName)
 end
 
 -------------------/\-------------------
-local Aimware_Misc_Features_ref = gui.Reference("Miscellaneous", "Features")
-local NameChanger_Combobox_ref = gui.Combobox(Aimware_Misc_Features_ref, "var_NameChanger_Listbox", "Clan-tag/Name-tag", "Disabled", "Fake name", "Static", "Static | Radar", "Minecraft enchantment | Radar", "Radar Exploit")
+local Aimware_Misc_Features_ref 		= gui.Reference("Miscellaneous", "Features")
+local NameChanger_Combobox_ref 			= gui.Combobox(Aimware_Misc_Features_ref, "var_NameChanger_Listbox", 
+							"Clan-tag/Name-tag", 
+							"Disabled", 
+							"Fake name", 
+							"Animated", 
+							"Static", 
+							"Static | Radar", 
+							"Minecraft enchantment | Radar", 
+							"Radar Exploit"
+						  )
 
-local NameChanger_Clantag_Editbox_ref = gui.Editbox(Aimware_Misc_Features_ref, "var_NameChanger_Clantag_Editbox", "")
+local NameChanger_Clantag_Editbox_ref 		= gui.Editbox(Aimware_Misc_Features_ref, "var_NameChanger_Clantag_Editbox", "")
+local NameChanger_Clantag_Speed_Slider_ref 	= gui.Slider(Aimware_Misc_Features_ref, "var_NameChanger_Clantag_Speed_Slider", "Animation speed", 0.3, 0, 1, 0.1)
 -------------------\/-------------------
 
 local function GetMagicSymbols(iCount)
-	local magicSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+	local magicSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 	local result = ""
 
 	for i = 1, iCount do
-		local magicIndex = math.random(1, magicSymbols:len() - 1)
+		local magicIndex = math.random(1, magicSymbols:len())
 		result = result .. magicSymbols:sub(magicIndex, magicIndex)
 	end
 
@@ -103,44 +113,82 @@ local function GetRealPlayerName()
 end
 
 local function SetUserNameAndClantag(cClantagWithName)
-	client.Command("name " .. cClantagWithName, true)
-	client.Command("setinfo name " .. '"' .. cClantagWithName .. '"', true)
+	client.Command('name ' .. '"' .. cClantagWithName .. '"', true)
+	client.Command('setinfo name ' .. '"' .. cClantagWithName .. '"', true)
 end
 
-local function DisabledClantagHendler()
+local function DisabledClantagHandler()
 	SetUserNameAndClantag(cOldRealName)
 end
 
-local function StaticClantagHendler()
+local function StaticClantagHandler()
 	SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName)
 end
 
-local function FakeNameHendler()
+local function FakeNameHandler()
 	SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString())
 end
 
+local cAnimatedName = " "
+local iAnimatedNameCurrentIndex = -1
+local bReversed = false
+
+local cLastTimeChanged_AnimTag = -1
+
+local function AnimatedNameHandler()
+	if globals.CurTime() < cLastTimeChanged_AnimTag then
+		cLastTimeChanged_AnimTag = globals.CurTime()
+	end
+
+	if (globals.CurTime() - cLastTimeChanged_AnimTag) < NameChanger_Clantag_Speed_Slider_ref:GetValue() then
+		return
+	end
+
+	cLastTimeChanged_AnimTag = globals.CurTime()
+
+	local ExitBoxStr_len = NameChanger_Clantag_Editbox_ref:GetString():len()
+
+	if bReversed then
+		iAnimatedNameCurrentIndex = iAnimatedNameCurrentIndex + 1
+		if iAnimatedNameCurrentIndex > ExitBoxStr_len then
+			bReversed = false
+			iAnimatedNameCurrentIndex = ExitBoxStr_len
+		end
+	else
+		iAnimatedNameCurrentIndex = iAnimatedNameCurrentIndex - 1
+		if iAnimatedNameCurrentIndex < 0 then
+			bReversed = true
+			iAnimatedNameCurrentIndex = 0
+		end
+	end
+		
+	local cCurrentAnimatedNameTag = cAnimatedName:sub(1, iAnimatedNameCurrentIndex)
+	local cAdditionalSpaces = ("\xC2\xA0\xC2\xA0"):rep(ExitBoxStr_len - iAnimatedNameCurrentIndex)
+	SetUserNameAndClantag(cCurrentAnimatedNameTag .. cAdditionalSpaces .. " " .. cOldRealName)
+end
+
 local fakeChanged = false
-local function StaticRadarClantagHendler()
+local function StaticRadarClantagHandler()
 	if fakeChanged then
 		SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName)
 		fakeChanged = false
 	else
-		SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName.. "⠀")
+		SetUserNameAndClantag(NameChanger_Clantag_Editbox_ref:GetString() .. " " .. cOldRealName.. "\xC2\xA0")
 		fakeChanged = true
 	end
 end
 
-local function MinecraftEnchantmentClantagHendler()
+local function MinecraftEnchantmentClantagHandler()
 	SetUserNameAndClantag(GetMagicSymbols(math.random(10, 16)))
 end
 
 -- local fakeChanged = false
-local function RadarExploitClantagHendler()
+local function RadarExploitClantagHandler()
 	if fakeChanged then
 		SetUserNameAndClantag(cOldRealName)
 		fakeChanged = false
 	else
-		SetUserNameAndClantag(cOldRealName .. "⠀")
+		SetUserNameAndClantag(cOldRealName .. "\xC2\xA0")
 		fakeChanged = true
 	end
 end
@@ -159,6 +207,10 @@ local function NameChangerLogicHandler()
 
 	if globals.CurTime() < cLastTimeChanged_logic then
 		cLastTimeChanged_logic = globals.CurTime()
+	end
+
+	if globals.CurTime() < cInitTime then
+		cInitTime = globals.CurTime()
 	end
 
 	if engine.GetServerIP() == nil then
@@ -181,7 +233,7 @@ local function NameChangerLogicHandler()
 		return
 	end
 
-	if (globals.CurTime() - cInitTime) < 0.3 then
+	if (globals.CurTime() - cInitTime) < 1.0 then
 		bNameWasSaved = false
 		return
 	end
@@ -198,44 +250,56 @@ local function NameChangerLogicHandler()
 		patchConVar("name")
 	end
 
-	if (globals.CurTime() - cLastTimeChanged_logic) > 0.01 then
+	if (globals.CurTime() - cLastTimeChanged_logic) > 0.03 then
 		cLastTimeChanged_logic = globals.CurTime()
 		local ComboboxValue = NameChanger_Combobox_ref:GetValue()
 		-- Lmao, switch case doesn't exists in lua
 
 		-- Disabled
 		if ComboboxValue == 0 and bNameWasChanged == true then
-			DisabledClantagHendler()
+			DisabledClantagHandler()
 			bNameWasChanged = false
 		end
 	
 		-- Fake name
 		if ComboboxValue == 1 then
-			FakeNameHendler()
+			FakeNameHandler()
+			bNameWasChanged = true
+		end
+
+		-- Animated
+		if ComboboxValue == 2 then
+			if NameChanger_Clantag_Editbox_ref:GetString() ~= cAnimatedName then
+				cAnimatedName = NameChanger_Clantag_Editbox_ref:GetString()
+				iAnimatedNameCurrentIndex = NameChanger_Clantag_Editbox_ref:GetString():len()
+				bReversed = false
+			end
+
+			AnimatedNameHandler()
 			bNameWasChanged = true
 		end
 
 		-- Static
-		if ComboboxValue == 2 then
-			StaticClantagHendler()
+		if ComboboxValue == 3 then
+			StaticClantagHandler()
 			bNameWasChanged = true
 		end
 
 		-- Static | Radar
-		if ComboboxValue == 3 then
-			StaticRadarClantagHendler()
+		if ComboboxValue == 4 then
+			StaticRadarClantagHandler()
 			bNameWasChanged = true
 		end
 
 		-- Minecraft enchantment | Radar
-		if ComboboxValue == 4 then
-			MinecraftEnchantmentClantagHendler()
+		if ComboboxValue == 5 then
+			MinecraftEnchantmentClantagHandler()
 			bNameWasChanged = true
 		end
 
 		-- Radar Exploit
-		if ComboboxValue == 5 then
-			RadarExploitClantagHendler()
+		if ComboboxValue == 6 then
+			RadarExploitClantagHandler()
 			bNameWasChanged = true
 		end
 	end
@@ -251,7 +315,7 @@ local function NameChangerMenuHandler()
 		cLastTimeChanged_menu = globals.CurTime()
 	end
 
-	if (globals.CurTime() - cLastTimeChanged_menu) > 0.01 then
+	if (globals.CurTime() - cLastTimeChanged_menu) > 0.03 then
 		cLastTimeChanged_menu = globals.CurTime()
 		local ComboboxValue = NameChanger_Combobox_ref:GetValue()
 		-- Lmao, switch case doesn't exists in lua
@@ -259,36 +323,48 @@ local function NameChangerMenuHandler()
 		-- Disabled
 		if ComboboxValue == 0 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(true)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(true)
 		end
 	
 		-- Fake name
 		if ComboboxValue == 1 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(true)
+		end
+
+		-- Animated
+		if ComboboxValue == 2 then
+			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(false)
 		end
 
 		-- Static
-		if ComboboxValue == 2 then
+		if ComboboxValue == 3 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(true)
 		end
 
 		-- Static | Radar
-		if ComboboxValue == 3 then
+		if ComboboxValue == 4 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(false)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(true)
 		end
 
 		-- Minecraft enchantment | Radar
-		if ComboboxValue == 4 then
+		if ComboboxValue == 5 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(true)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(true)
 		end
 
 		-- Radar Exploit
-		if ComboboxValue == 5 then
+		if ComboboxValue == 6 then
 			NameChanger_Clantag_Editbox_ref:SetInvisible(true)
+			NameChanger_Clantag_Speed_Slider_ref:SetInvisible(true)
 		end
 	end
 end
 
-local cCurrentVersion = "v1.3.7"
+local cCurrentVersion = "v1.4.0"
 local function CheckForUpdates()
 	http.Get("https://raw.githubusercontent.com/0neLucky0neee/Aimware_Luas/refs/heads/main/Name%20Changer/Assets/version.txt", function(cExpectedVesion)
 		print("[Name Changer] Your lua version is: " .. cCurrentVersion)
@@ -323,6 +399,6 @@ callbacks.Register("Unload", function()
 			return
 		end
 
-		DisabledClantagHendler()
+		DisabledClantagHandler()
 	end
 end)
